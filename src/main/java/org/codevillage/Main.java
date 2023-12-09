@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.codevillage.fetching.*;
-import java.io.IOException;
 
 public class Main extends JFrame {
   public static void main(String[] args) {
@@ -48,8 +47,8 @@ public class Main extends JFrame {
         String targetPath = targetPathTextField.getText();
         JOptionPane.showMessageDialog(Main.this,
             "Selected Data Type: " + selectedDataType + "\nLink: " + link + "\nTarget Path: " + targetPath);
-//        fetch[0].downloadPackage(link, targetPath);
-        File directory = new File("C:/Users/liamh/OneDrive/Desktop/csc509/CodeVillage/temp/src/main/java/org/codevillage");
+        fetch[0].downloadPackage(link, targetPath);
+        File directory = new File(linkTextField.getText());
         SourceCodeParser sourceCodeParser = new SourceCodeParser();
         try {
           ArrayList<JavaEntity> entities = sourceCodeParser.parseSourceFiles(directory);

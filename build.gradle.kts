@@ -4,6 +4,10 @@ plugins {
     id("java")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_18
+    targetCompatibility = JavaVersion.VERSION_18
+}
 
 group = "org.codevillage"
 version = "1.0-SNAPSHOT"
