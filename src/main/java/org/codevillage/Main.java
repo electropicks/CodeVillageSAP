@@ -13,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import org.jfree.chart.ChartFactory;
@@ -81,6 +82,12 @@ public class Main extends JFrame {
           neighborhoodGroupingLink.position(entities);
         } catch (IOException ioError) {
           ioError.printStackTrace();
+          // Delete target path directory
+          try {
+            Utils.deleteDirectory(Path.of(targetPath));
+          } catch (IOException exception) {
+            exception.printStackTrace();
+          }
         }
       }
     });
@@ -130,6 +137,7 @@ public class Main extends JFrame {
         }
       }
     });
+
   }
 
   private void openGraphWindow() {
