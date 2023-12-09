@@ -1,5 +1,10 @@
 package org.codevillage;
 
+import org.codevillage.fetching.DataFetcher;
+import org.codevillage.fetching.GithubDataFetcher;
+import org.codevillage.fetching.LocalDataFetcher;
+import org.codevillage.fetching.SVNDataFetcher;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.codevillage.fetching.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class Main extends JFrame {
   public static void main(String[] args) {
@@ -22,7 +33,6 @@ public class Main extends JFrame {
   }
 
   Main() {
-
     JPanel mainPanel = new JPanel(new BorderLayout());
     JPanel topPanel = new JPanel(new GridLayout(4, 2));
 
@@ -36,9 +46,10 @@ public class Main extends JFrame {
     String[] dataTypes = { "GitHub", "Subversion", "Local Drive" };
     JComboBox<String> dataTypeDropdown = new JComboBox<>(dataTypes);
     JButton submitButton = new JButton("Submit");
-    // logic
-    DataFetcher[] fetch = { null };
+
+    DataFetcher[] fetch = {null};
     fetch[0] = new GithubDataFetcher();
+
     submitButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -46,7 +57,7 @@ public class Main extends JFrame {
         String link = linkTextField.getText();
         String targetPath = targetPathTextField.getText();
         JOptionPane.showMessageDialog(Main.this,
-            "Selected Data Type: " + selectedDataType + "\nLink: " + link + "\nTarget Path: " + targetPath);
+                "Selected Data Type: " + selectedDataType + "\nLink: " + link + "\nTarget Path: " + targetPath);
         fetch[0].downloadPackage(link, targetPath);
         File directory = new File(linkTextField.getText());
         SourceCodeParser sourceCodeParser = new SourceCodeParser();
@@ -64,7 +75,8 @@ public class Main extends JFrame {
                                                   )
                                           )
                                   )
-                          ))
+                          )
+                  )
           );
           neighborhoodGroupingLink.position(entities);
         } catch (IOException ioError) {
@@ -84,15 +96,24 @@ public class Main extends JFrame {
     Canvas canvas = new Canvas();
     CanvasData data = CanvasData.getInstance();
     data.addPropertyChangeListener(canvas);
-    canvas.setBackground(Color.BLUE); // testing canvas is there
+    canvas.setBackground(Color.BLUE);
 
-    // implement camera
     Camera cameraInstance = Camera.getInstance();
     addKeyListener(cameraInstance.getKeyListener());
 
     mainPanel.add(topPanel, BorderLayout.NORTH);
     mainPanel.add(canvas, BorderLayout.CENTER);
     add(mainPanel);
+
+    JButton openGraphButton = new JButton("Open Graph Window");
+    topPanel.add(openGraphButton);
+
+    openGraphButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        openGraphWindow();
+      }
+    });
 
     dataTypeDropdown.addItemListener(new ItemListener() {
       @Override
@@ -109,5 +130,35 @@ public class Main extends JFrame {
         }
       }
     });
+  }
+
+  private void openGraphWindow() {
+    JFrame graphFrame = new JFrame("Graph Window");
+    graphFrame.setSize(600, 400);
+
+    XYSeries series = new XYSeries("Sample Data");
+    series.add(1, 5);
+    series.add(2, 8);
+    series.add(3, 12);
+    series.add(4, 6);
+
+    XYDataset dataset = new XYSeriesCollection(series);
+
+    JFreeChart chart = ChartFactory.createXYLineChart(
+            "Sample Chart",
+            "X Axis",
+            "Y Axis",
+            dataset,
+            PlotOrientation.VERTICAL,
+            true,
+            true,
+            false
+    );
+
+    ChartPanel chartPanel = new ChartPanel(chart);
+    graphFrame.getContentPane().add(chartPanel, BorderLayout.CENTER);
+
+    graphFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    graphFrame.setVisible(true);
   }
 }
