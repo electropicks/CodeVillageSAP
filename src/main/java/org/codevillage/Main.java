@@ -146,8 +146,8 @@ public class Main extends JFrame {
 
     JFreeChart chart = ChartFactory.createXYLineChart(
             "Sample Chart",
-            "X Axis",
-            "Y Axis",
+            "A Axis",
+            "I Axis",
             dataset,
             PlotOrientation.VERTICAL,
             true,
