@@ -24,8 +24,8 @@ dependencies {
     implementation("com.github.javaparser:javaparser-core:3.25.7")
     implementation("org.junit.jupiter:junit-jupiter:5.8.1")
     implementation("org.projectlombok:lombok:1.18.28")
-    implementation("org.apache.logging.log4j:log4j-api:2.14.1")
-    implementation("org.apache.logging.log4j:log4j-core:2.14.1")
+    implementation("org.apache.logging.log4j:log4j-api:2.17.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.17.1")
     implementation("org.jfree:jfreechart:1.5.3")
     implementation("org.jfree:jcommon:1.0.23")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
@@ -41,7 +41,7 @@ tasks.test {
         events("passed", "skipped", "failed") //, "standardOut", "standardError"
 
         showExceptions = true
-        exceptionFormat = TestExceptionFormat.FULL;
+        exceptionFormat = TestExceptionFormat.FULL
         showCauses = true
         showStackTraces = true
 
