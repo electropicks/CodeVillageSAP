@@ -1,5 +1,6 @@
 package org.codevillage;
 
+import lombok.extern.log4j.Log4j2;
 import org.codevillage.fetching.DataFetcher;
 import org.codevillage.fetching.GithubDataFetcher;
 import org.codevillage.fetching.LocalDataFetcher;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+@Log4j2
 public class Main extends JFrame {
   public static void main(String[] args) {
     Main window = new Main();
@@ -73,6 +75,7 @@ public class Main extends JFrame {
                 )
         );
         neighborhoodGroupingLink.position(entities);
+        log.info("Created {} entities", entities.size());
       } catch (IOException ioError) {
         ioError.printStackTrace();
         // Delete target path directory

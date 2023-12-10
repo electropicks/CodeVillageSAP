@@ -25,6 +25,7 @@ public class VillageSaver {
             int width = 1920;
             int height = 1080;
             BufferedImage highResImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+//            BufferedImage highResImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = highResImage.createGraphics();
 
             canvas.drawContent(g2d);
@@ -34,10 +35,17 @@ public class VillageSaver {
             g2d.dispose();
 
             // Save the high-resolution image
-            String fileName = villageName + ".jpeg";
+            String fileName = villageName + ".png";
             File file = new File(fileName);
-            ImageIO.write(highResImage, "JPEG", file);
-            assert file.exists();
+
+            ImageIO.write(highResImage, "PNG", file);
+            boolean writeSuccess = ImageIO.write(highResImage, "PNG", file);
+            log.debug("Write successful: {}", writeSuccess);
+
+            log.info("Village saved in high resolution at {}", file.getAbsolutePath());
+            if (!file.exists()) {
+                log.error("File not found after saving");
+            }
 
             JOptionPane.showMessageDialog(frame, "Village saved in high resolution as " + fileName);
         } catch (Exception e) {
