@@ -89,7 +89,7 @@ public class Main extends JFrame {
     Canvas canvas = new Canvas();
     CanvasData data = CanvasData.getInstance();
     data.addPropertyChangeListener(canvas);
-    canvas.setBackground(Color.BLUE);
+    canvas.setBackground(Color.LIGHT_GRAY);
 
     Camera cameraInstance = Camera.getInstance();
     addKeyListener(cameraInstance.getKeyListener());
