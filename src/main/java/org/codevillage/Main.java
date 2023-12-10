@@ -47,7 +47,7 @@ public class Main extends JFrame {
       JOptionPane.showMessageDialog(Main.this,
               "Selected Data Type: " + selectedDataType + "\nLink: " + link + "\nTarget Path: " + targetPath);
       fetch[0].downloadPackage(link, targetPath);
-      File directory = new File(linkTextField.getText());
+      File directory = new File(targetPath);
       SourceCodeParser sourceCodeParser = new SourceCodeParser();
       try {
         ArrayList<JavaEntity> entities = sourceCodeParser.parseSourceFiles(directory);
@@ -70,11 +70,11 @@ public class Main extends JFrame {
       } catch (IOException ioError) {
         ioError.printStackTrace();
         // Delete target path directory
-        try {
-          Utils.deleteDirectory(Path.of(targetPath));
-        } catch (IOException exception) {
-          exception.printStackTrace();
-        }
+      }
+      try {
+        Utils.deleteDirectory(Path.of(targetPath));
+      } catch (IOException exception) {
+        exception.printStackTrace();
       }
     });
 
