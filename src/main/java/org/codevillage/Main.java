@@ -24,14 +24,20 @@ public class Main extends JFrame {
 
   Main() {
     JPanel mainPanel = new JPanel(new BorderLayout());
-    JPanel topPanel = new JPanel(new GridLayout(4, 2));
+    JPanel topPanel = new JPanel(new GridLayout(5, 2));
+    JPanel bottomPanel = new JPanel(new GridLayout(1, 2));
+    Canvas canvas = new Canvas();
+
+    VillageSaver villageSaver = new VillageSaver("CodeVillage", this, canvas);
 
     // top panel components
     JLabel linkLabel = new JLabel("Link:");
     JLabel targetPathLabel = new JLabel("Target Path:");
     JLabel dataTypeLabel = new JLabel("Select Data Type:");
     JTextField linkTextField = new JTextField(20);
+    linkTextField.setText("https://github.com/electropicks/CodeVillageSAP.git");
     JTextField targetPathTextField = new JTextField(20);
+    targetPathTextField.setText("./temp");
 
     String[] dataTypes = { "GitHub", "Subversion", "Local Drive" };
     JComboBox<String> dataTypeDropdown = new JComboBox<>(dataTypes);
@@ -86,7 +92,6 @@ public class Main extends JFrame {
     topPanel.add(dataTypeDropdown);
     topPanel.add(submitButton);
 
-    Canvas canvas = new Canvas();
     CanvasData data = CanvasData.getInstance();
     data.addPropertyChangeListener(canvas);
     canvas.setBackground(Color.LIGHT_GRAY);
@@ -96,7 +101,15 @@ public class Main extends JFrame {
 
     mainPanel.add(topPanel, BorderLayout.NORTH);
     mainPanel.add(canvas, BorderLayout.CENTER);
+    mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     add(mainPanel);
+
+    JButton saveVillageButton = new JButton("Save Village");
+    bottomPanel.add(saveVillageButton);
+
+    saveVillageButton.addActionListener(e -> {
+      villageSaver.saveVillage();
+    });
 
     JButton openGraphButton = new JButton("Open Graph Window");
     topPanel.add(openGraphButton);
