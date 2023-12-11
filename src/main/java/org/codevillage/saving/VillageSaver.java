@@ -1,7 +1,8 @@
-package org.codevillage;
+package org.codevillage.saving;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.codevillage.Canvas;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,23 +10,21 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import java.awt.Rectangle;
-import java.awt.Robot;
 
 @Log4j2
 @AllArgsConstructor
-public class VillageSaver {
+public class VillageSaver implements ImageSaver {
     private final String villageName;
     private final JFrame frame;
     private final Canvas canvas; // The canvas to capture
 
-    public void saveVillage() {
+    @Override
+    public void saveImage() {
         try {
             // Create a high-resolution BufferedImage
             int width = 1920;
             int height = 1080;
             BufferedImage highResImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-//            BufferedImage highResImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = highResImage.createGraphics();
 
             canvas.drawContent(g2d);

@@ -5,6 +5,7 @@ import org.codevillage.fetching.DataFetcher;
 import org.codevillage.fetching.GithubDataFetcher;
 import org.codevillage.fetching.LocalDataFetcher;
 import org.codevillage.fetching.SVNDataFetcher;
+import org.codevillage.saving.VillageSaver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,17 +111,14 @@ public class Main extends JFrame {
     JButton saveVillageButton = new JButton("Save Village");
     bottomPanel.add(saveVillageButton);
 
-    saveVillageButton.addActionListener(e -> {
-      villageSaver.saveVillage();
-    });
+    saveVillageButton.addActionListener(e -> villageSaver.saveImage());
 
     JButton openGraphButton = new JButton("Open Graph Window");
     topPanel.add(openGraphButton);
 
-    openGraphButton.addActionListener(e -> {
-      GraphWindow graphWindow = new GraphWindow();
-      graphWindow.openGraphWindow();
-    });
+    GraphWindow graphWindow = new GraphWindow();
+    openGraphButton.addActionListener(e -> graphWindow.openGraphWindow());
+
 
     dataTypeDropdown.addItemListener(e -> {
       if (e.getStateChange() == ItemEvent.SELECTED) {

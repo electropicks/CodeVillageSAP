@@ -1,5 +1,6 @@
 package org.codevillage;
 
+import org.codevillage.saving.SAPGraphSaver;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -40,5 +41,13 @@ public class GraphWindow {
 
         graphFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         graphFrame.setVisible(true);
+        // add save button
+        JButton saveButton = new JButton("Save");
+        saveButton.addActionListener(e -> {
+            // save image
+             SAPGraphSaver sapGraphSaver = new SAPGraphSaver("SAP_Graph", graphFrame, chartPanel);
+             sapGraphSaver.saveImage();
+        });
+        graphFrame.getContentPane().add(saveButton, BorderLayout.SOUTH);
     }
 }
