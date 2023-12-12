@@ -14,9 +14,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 public class Main extends JFrame {
+  private AICalculator aiCalculator;  // Declare aiCalculator as an instance variable
+  private ArrayList<JavaEntity> entities;  // Declare entities as an instance variable
+
   public static void main(String[] args) {
     Main window = new Main();
     window.setSize(1000, 1000);
@@ -33,7 +37,6 @@ public class Main extends JFrame {
 
     VillageSaver villageSaver = new VillageSaver("CodeVillage", this, canvas);
 
-    // top panel components
     JLabel linkLabel = new JLabel("Link:");
     JLabel targetPathLabel = new JLabel("Target Path:");
     JLabel dataTypeLabel = new JLabel("Select Data Type:");
@@ -59,7 +62,18 @@ public class Main extends JFrame {
       File directory = new File(targetPath);
       SourceCodeParser sourceCodeParser = new SourceCodeParser();
       try {
-        ArrayList<JavaEntity> entities = sourceCodeParser.parseSourceFiles(directory);
+        entities = sourceCodeParser.parseSourceFiles(directory);
+
+        aiCalculator = new AICalculator();
+        if (!entities.isEmpty() && entities.get(0) instanceof JavaClass) {
+          ArrayList<JavaClass> javaClasses = new ArrayList<>();
+          for (JavaEntity entity : entities) {
+            if (entity instanceof JavaClass) {
+              javaClasses.add((JavaClass) entity);
+            }
+          }
+          aiCalculator.calculateConnections(javaClasses);
+        }
         NeighborhoodGroupingLink neighborhoodGroupingLink = new NeighborhoodGroupingLink(
                 new InterfaceInsertLink(
                         new ShapeInitLink(
@@ -77,6 +91,7 @@ public class Main extends JFrame {
         );
         neighborhoodGroupingLink.position(entities);
         log.info("Created {} entities", entities.size());
+
       } catch (IOException ioError) {
         ioError.printStackTrace();
         // Delete target path directory
@@ -111,14 +126,17 @@ public class Main extends JFrame {
     JButton saveVillageButton = new JButton("Save Village");
     bottomPanel.add(saveVillageButton);
 
-    saveVillageButton.addActionListener(e -> villageSaver.saveImage());
+    saveVillageButton.addActionListener(s -> villageSaver.saveImage());
 
     JButton openGraphButton = new JButton("Open Graph Window");
     topPanel.add(openGraphButton);
 
-    GraphWindow graphWindow = new GraphWindow();
-    openGraphButton.addActionListener(e -> graphWindow.openGraphWindow());
-
+    openGraphButton.addActionListener(o -> {
+      if (aiCalculator != null && entities != null) {
+        GraphWindow graphWindow = new GraphWindow(aiCalculator);
+        graphWindow.openGraphWindow();
+      }
+    });
 
     dataTypeDropdown.addItemListener(e -> {
       if (e.getStateChange() == ItemEvent.SELECTED) {

@@ -11,24 +11,36 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class GraphWindow {
+    private AICalculator aiCalculator;
+
+    public GraphWindow(AICalculator aiCalculator) {
+        this.aiCalculator = aiCalculator;
+    }
+
     public void openGraphWindow() {
         JFrame graphFrame = new JFrame("Graph Window");
         graphFrame.setSize(600, 400);
 
-        XYSeries series = new XYSeries("Sample Data");
-        series.add(1, 5);
-        series.add(2, 8);
-        series.add(3, 12);
-        series.add(4, 6);
+        XYSeries series = new XYSeries("Java Classes");
+
+        List<Double> instabilityList = aiCalculator.getInstabilityList();
+        List<Double> abstractnessList = aiCalculator.getAbstractnessList();
+
+        for (int i = 0; i < abstractnessList.size(); i++) {
+            double x = instabilityList.get(i);
+            double y = abstractnessList.get(i);
+            series.add(x, y);
+        }
 
         XYDataset dataset = new XYSeriesCollection(series);
 
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                "Sample Chart",
-                "A Axis",
-                "I Axis",
+        JFreeChart chart = ChartFactory.createScatterPlot(
+                "Java Class Metrics",
+                "Instability (I Axis)",
+                "Abstractness (A Axis)",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
@@ -41,12 +53,13 @@ public class GraphWindow {
 
         graphFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         graphFrame.setVisible(true);
-        // add save button
+
+        // Add save button
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
-            // save image
-             SAPGraphSaver sapGraphSaver = new SAPGraphSaver("SAP_Graph", graphFrame, chartPanel);
-             sapGraphSaver.saveImage();
+            // Save image
+            SAPGraphSaver sapGraphSaver = new SAPGraphSaver("SAP_Graph", graphFrame, chartPanel);
+            sapGraphSaver.saveImage();
         });
         graphFrame.getContentPane().add(saveButton, BorderLayout.SOUTH);
     }
