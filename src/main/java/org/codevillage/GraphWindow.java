@@ -1,5 +1,6 @@
 package org.codevillage;
 
+import lombok.Getter;
 import org.codevillage.saving.SAPGraphSaver;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -14,14 +15,13 @@ import java.awt.*;
 import java.util.List;
 
 public class GraphWindow {
-    private AICalculator aiCalculator;
+    @Getter
+    private final JFrame graphFrame;
+    @Getter
+    private final ChartPanel chartPanel;
 
     public GraphWindow(AICalculator aiCalculator) {
-        this.aiCalculator = aiCalculator;
-    }
-
-    public void openGraphWindow() {
-        JFrame graphFrame = new JFrame("Graph Window");
+        graphFrame = new JFrame("Graph Window");
         graphFrame.setSize(600, 400);
 
         XYSeries series = new XYSeries("Java Classes");
@@ -48,7 +48,7 @@ public class GraphWindow {
                 false
         );
 
-        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel = new ChartPanel(chart);
         graphFrame.getContentPane().add(chartPanel, BorderLayout.CENTER);
 
         graphFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
